@@ -1,0 +1,33 @@
+{% extends "dashboard.html" %}
+{% block title %}View Users{% endblock %}
+
+{% block content %}
+
+<h3>My Profile</h3>
+
+<table border="1" cellpadding="8">
+    <tr style="background-color:#2c3e50; color:white;">
+        <th>ID</th>
+        <th>Fullname</th>
+        <th>Username</th>
+        <th>Email</th>
+        <th>Phone</th>
+        <th>Gender</th>
+        <th>Role</th>
+    </tr>
+
+    {% for user in users %}
+    <tr>
+        <td>{{ user[0] }}</td>
+        <td>{{ user[1] }}</td>
+        <td>{{ user[2] }}</td>
+        <td>{{ user[3] }}</td>
+        <td>{{ user[4] }}</td>
+        <td>{{ user[5] }}</td>
+        <td>{{ user[6] }}</td>
+    </tr>
+    {% endfor %}
+
+</table>
+
+{% endblock %}
