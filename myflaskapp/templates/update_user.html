@@ -1,0 +1,98 @@
+{% extends "dashboard.html" %}
+{% block title %}Update User{% endblock %}
+{% block content %}
+
+<style>
+    .btn-area{
+    margin-top: 30px;   /* space above button */
+}
+
+.update-btn{
+    /* background-color: #28a745;    */
+    color: black;
+    padding: 10px 16px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+}
+
+.update-btn:hover{
+    background-color: #218838;   /* darker green on hover */
+}
+
+</style>
+<h3>Update User</h3>
+
+<!-- Search form (always visible) -->
+<form method="GET" action="{{ url_for('update_user') }}">
+  <input type="text" name="user_id" placeholder="Enter User ID" value="{{request.args.get('user_id', '')}}" required>
+  <button type="submit">Search</button>
+</form>
+
+{% if error %}
+  <p style="color:red;">{{ error }}</p>
+{% endif %}
+{% if success %}
+  <p style="color:green;">{{ success }}</p>
+{% endif %}
+
+{% if result_user %}
+  <hr>
+
+  <!-- Update form -->
+  <form method="POST" action="{{ url_for('update_user') }}">
+    <input type="hidden" name="user_id" value="{{ result_user[0] }}">
+    
+    <label>Fullname:</label>
+    <input type="text" name="fullname" value="{{ result_user[1] }}" placeholder="Full Name">
+
+    <label>Username:</label>
+    <input type="text" name="username" value="{{ result_user[2] }}" placeholder="Username">
+
+    <label>Password:</label>
+    <input type="password" name="password" placeholder="New Password (leave empty to keep old)">
+
+    <label>Email:</label>
+    <input type="email" name="email" value="{{ result_user[4] }}" placeholder="Email">
+
+    <label>Phone:</label>
+    <input type="text" name="phone" value="{{ result_user[5] or '' }}" placeholder="Phone">
+    
+    <label>Gender:</label>
+    <select name="gender">
+      <option value="Male"   {% if result_user[6] == 'Male' %}selected{% endif %}>Male</option>
+      <option value="Female" {% if result_user[6] == 'Female' %}selected{% endif %}>Female</option>
+      <option value="Others" {% if result_user[6] == 'Others' %}selected{% endif %}>Others</option>
+    </select>
+
+    <label>Role:</label>
+    <select name="role">
+      <option value="Admin"    {% if result_user[7] == 'Admin' %}selected{% endif %}>Admin</option>
+      <option value="Employee" {% if result_user[7] == 'Employee' %}selected{% endif %}>Employee</option>
+      <option value="Manager"  {% if result_user[7] == 'Manager' %}selected{% endif %}>Manager</option>
+      <option value="HR"       {% if result_user[7] == 'HR' %}selected{% endif %}>HR</option>
+    </select>
+
+    <label>Status:</label>
+    <select name="status">
+        <option value="Active"
+            {% if result_user[8] == 1 %}selected{% endif %}>
+            Active
+        </option>
+
+        <option value="Inactive"
+            {% if result_user[8] == 0 %}selected{% endif %}>
+            Inactive
+        </option>
+    </select>
+
+
+    <div class="btn-area">
+        <button type="submit" class="update-btn">Update</button>
+    </div>
+    
+  </form>
+{% endif %}
+
+{% endblock %}

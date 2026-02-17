@@ -1,0 +1,76 @@
+{% extends "dashboard.html" %}
+{% block title %}Give Permission{% endblock %}
+
+{% block extra_css %}
+<style>
+  .page-content{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding-top: 30px;
+  }
+  .mdt{
+    width: 100%;
+    max-width: 700px;
+    background: #ffffff;
+    padding: 22px;
+    border-radius: 12px;
+    box-shadow: 0 4px 14px rgba(0,0,0,0.08);
+  }
+  .mdt input[type="number"]{
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+  }
+  .mdt button{
+    padding: 10px 16px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    background: #2c3e50;
+    color: white;
+    font-weight: 600;
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="page-content">
+  <div class="mdt">
+
+    <h3>Search User</h3>
+
+    <form method="GET" action="{{ url_for('search_user') }}">
+      <input type="box" name="user_id" placeholder="Enter User ID" value="{{request.args.get('user_id', '')}}" required>
+      <button type="submit">Search</button>
+    </form>
+
+    {% if error %}
+      <p style="color:red">{{ error }}</p>
+    {% endif %}
+
+    {% if user %}
+      <hr>
+      <p><b>User:</b> {{ user[1] }} ({{ user[2] }})</p>
+
+      <form method="POST" action="{{ url_for('save_permissions', user_id=user[0]) }}">
+        {% for f in features %}
+          <label style="display:block; margin:6px 0;">
+            <input type="checkbox"
+                name="feature_codes"
+                value="{{ f[0] }}"
+                {% if allowed_map.get(f[0], 0) == 1 %}checked{% endif %}>
+            {{ f[1] }}
+          </label>
+        {% endfor %}
+
+        <button type="submit">Save Permissions</button>
+      </form>
+    {% endif %}
+
+  </div>
+</div>
+{% endblock %}
